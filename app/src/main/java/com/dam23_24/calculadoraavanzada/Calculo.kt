@@ -1,4 +1,4 @@
-package com.dam23_24.calculadora
+package com.dam23_24.calculadoraavanzada
 
 @Suppress("SpellCheckingInspection")
 class Calculo {

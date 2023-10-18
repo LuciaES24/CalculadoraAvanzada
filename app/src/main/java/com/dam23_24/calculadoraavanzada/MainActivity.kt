@@ -1,4 +1,4 @@
-package com.dam23_24.calculadora
+package com.dam23_24.calculadoraavanzada
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -213,25 +213,31 @@ class MainActivity : AppCompatActivity() {
     private fun btnDELClicked(){
         var pantalla = txtPantalla.text.toString()
         var detalle = txtDetalle.text.toString()
-        val ultimoElementoDetalle = buscarUltimoElemento(detalle)
-        //Si nos encontraos en el primer número y no está vacío
+        //Si nos encontraos en el primer número quitamos el último elemento
         if (calc.primerNum && calc.numTemp1.isNotEmpty()){
             calc.numTemp1 = calc.numTemp1.substring(0,calc.numTemp1.length-1)
             pantalla = txtPantalla.text.substring(0,txtPantalla.length()-1)
             detalle = txtDetalle.text.substring(0,txtDetalle.length()-1)
-        }//Si el último elemento de la pantalla es una operación
-        else if(ultimoElementoDetalle==calc.operadorTxt() && calc.numTemp2.isEmpty()){
-            calc.op = 0
-            pantalla = txtPantalla.text.substring(0, txtPantalla.length() - 1)
+            calc.num1=0f
+        }//Si el segundo número está vacío nos encontraríamos en el operador
+        else if(calc.numTemp2.isEmpty()){
+            calc.op = 4
+            //Si el operador se encuentra en la pantalla lo eliminamos también de ella
+            if (pantalla.isNotEmpty()){
+                pantalla = txtPantalla.text.substring(0, txtPantalla.length() - 1)
+            }
             detalle = txtDetalle.text.substring(0, txtDetalle.length() - 1)
+            calc.primerNum
         }//Muestra el toast si las variables están vacías
-        else if(calc.numTemp1.isEmpty() && calc.numTemp2.isEmpty() && calc.op==0){
+        else if(calc.numTemp1 == ""  && calc.numTemp2 == "" && calc.op==0){
+            calc.iniValores(resetNumCalculos = true, resetResult = false)
             mensajeError("No hay nada que borrar")
-        }//Si nos encontraos en el segundo número y no está vacío
+        }//Si nos encontraos en el segundo número y no está vacío quitamos el último elemento
         else if(!calc.primerNum && calc.numTemp2.isNotEmpty()){
             calc.numTemp2 = calc.numTemp2.substring(0, calc.numTemp2.length - 1)
             pantalla = txtPantalla.text.substring(0, txtPantalla.length() - 1)
             detalle = txtDetalle.text.substring(0, txtDetalle.length() - 1)
+            calc.num2 = 0f
         }
         muestraValor(pantalla,detalle)
     }
@@ -255,18 +261,5 @@ class MainActivity : AppCompatActivity() {
      */
     private fun mensajeError(msj: String) {
         Toast.makeText(this, msj, Toast.LENGTH_SHORT).show()
-    }
-
-    /**
-     * Devuelve el último valor encontrado de una cadena
-     *
-     * @elemento cadena de la que se quiere buscar su último elemento
-     */
-    private fun buscarUltimoElemento(elemento:String):String{
-        var resultado = ""
-        if (elemento.isNotEmpty()){
-            resultado = elemento.substring(elemento.length)
-        }
-        return resultado
     }
 }
