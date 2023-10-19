@@ -213,8 +213,12 @@ class MainActivity : AppCompatActivity() {
     private fun btnDELClicked(){
         var pantalla = txtPantalla.text.toString()
         var detalle = txtDetalle.text.toString()
-        //Si nos encontraos en el primer número quitamos el último elemento
-        if (calc.primerNum && calc.numTemp1.isNotEmpty()){
+        //Muestra el toast si las variables están vacías o se ha pulsado el igual
+        if(calc.numTemp1=="" && calc.numTemp2=="" && calc.op==0 || calc.result!=0f){
+            calc.iniValores(resetNumCalculos = true, resetResult = false)
+            mensajeError("No hay nada que borrar")
+        } //Si nos encontraos en el primer número quitamos el último elemento
+        else if (calc.primerNum && calc.numTemp1.isNotEmpty()){
             calc.numTemp1 = calc.numTemp1.substring(0,calc.numTemp1.length-1)
             pantalla = txtPantalla.text.substring(0,txtPantalla.length()-1)
             detalle = txtDetalle.text.substring(0,txtDetalle.length()-1)
@@ -222,18 +226,14 @@ class MainActivity : AppCompatActivity() {
         }//Si el segundo número está vacío nos encontraríamos en el operador
         else if(calc.numTemp2.isEmpty()){
             calc.op = 4
-            //Si el operador se encuentra en la pantalla lo eliminamos también de ella
+            //Si el operador se encuentra en la pantalla también lo eliminamos
             if (pantalla.isNotEmpty()){
                 pantalla = txtPantalla.text.substring(0, txtPantalla.length() - 1)
             }
             detalle = txtDetalle.text.substring(0, txtDetalle.length() - 1)
             calc.primerNum
-        }//Muestra el toast si las variables están vacías
-        else if(calc.numTemp1 == ""  && calc.numTemp2 == "" && calc.op==0){
-            calc.iniValores(resetNumCalculos = true, resetResult = false)
-            mensajeError("No hay nada que borrar")
         }//Si nos encontraos en el segundo número y no está vacío quitamos el último elemento
-        else if(!calc.primerNum && calc.numTemp2.isNotEmpty()){
+        else if(!calc.primerNum && calc.numTemp2.isNotEmpty() && calc.result==0f){
             calc.numTemp2 = calc.numTemp2.substring(0, calc.numTemp2.length - 1)
             pantalla = txtPantalla.text.substring(0, txtPantalla.length() - 1)
             detalle = txtDetalle.text.substring(0, txtDetalle.length() - 1)
